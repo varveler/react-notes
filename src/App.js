@@ -7,10 +7,7 @@ import NotesForm from './NotesForm';
 import NotesList from './NotesList';
 import {Link, Route} from 'react-router-dom';
 import Home from './Home';
-
-
-
-
+import Note from './Note';
 
 
 
@@ -34,8 +31,6 @@ class App extends Component {
   //   this.setState({
   //     [event.target.name]: event.target.value
   //   })
-
-
     //console.log(this.state.value);
   };
   saveNote = (e) => {
@@ -82,6 +77,7 @@ class App extends Component {
               path="/add"
               render={NotesForm2}
             />
+            <Route path='/view/:id' render={props => <Note {...props} notes={this.state.notes}/> } />
 
           </Grid>
         </Grid>
