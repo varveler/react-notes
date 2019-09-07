@@ -5,6 +5,13 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import NotesForm from './NotesForm';
 import NotesList from './NotesList';
+import {Link, Route} from 'react-router-dom';
+import Home from './Home';
+
+
+
+
+
 
 
 class App extends Component {
@@ -16,6 +23,7 @@ class App extends Component {
       notes: []
     };
   };
+
   updateFields = field => event =>{
     //console.log(event.target.value); //{/* e.target es el padre que llama el evento, en este caso es imput */}
     this.setState({
@@ -49,6 +57,16 @@ class App extends Component {
   }
   render(){
     console.log(this.state)
+    const NotesForm2 = (props) => (
+          <NotesForm
+            {...props}
+            title={this.state.title}
+            description={this.state.description}
+            //updateValue={this.updateValue}
+            updateFields = {this.updateFields}
+            saveNote = {this.saveNote}
+        />
+)
     return (
       <Fragment>
         <Typography align='center' variant='h2' gutterBottom>
@@ -59,16 +77,15 @@ class App extends Component {
             <NotesList notes={this.state.notes}/>
           </Grid>
           <Grid item xs={8}>
-            <NotesForm
-            title={this.state.title}
-            description={this.state.description}
-            //updateValue={this.updateValue}
-            updateFields = {this.updateFields}
-            saveNote = {this.saveNote}
+            <Route exact path='/' component={Home}/>
+            <Route
+              path="/add"
+              render={NotesForm2}
             />
+
           </Grid>
         </Grid>
-        <Fab color='primary' className='addIcon'>
+        <Fab color='primary' className='addIcon' component={Link} to='/add'>
           <AddIcon/>
         </Fab>
       </Fragment>

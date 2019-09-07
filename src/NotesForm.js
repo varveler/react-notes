@@ -3,6 +3,7 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Fab from '@material-ui/core/Fab';
 import Icon from '@material-ui/core/Icon';
+import {Link} from 'react-router-dom';
 
 const NotesForm = ({title, description, updateFields, saveNote}) => {
   return(
@@ -38,9 +39,9 @@ const NotesForm = ({title, description, updateFields, saveNote}) => {
            />
         </Grid>
         </form>
-      <Fab color='secondary' className='editIcon' onClick={saveNote}>
-        <Icon>edit_icon</Icon>
-      </Fab>
+        <Fab color='secondary' className='editIcon' onClick={saveNote}>
+          <Icon>edit_icon</Icon>
+        </Fab>
     </Fragment>
   )
 };
