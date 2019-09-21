@@ -5,7 +5,7 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import NotesForm from './NotesForm';
 import NotesList from './NotesList';
-import {Link, Route} from 'react-router-dom';
+import {Link, Route, Redirect} from 'react-router-dom';
 import Home from './Home';
 import Note from './Note';
 
@@ -33,22 +33,42 @@ class App extends Component {
   //   })
     //console.log(this.state.value);
   };
-  saveNote = (e) => {
-    if(this.state.title.trim() && this.state.description.trim()){
-      this.setState({
-        title:'',
-        description: '',
-        notes: [
-          ...this.state.notes,
-          {
-          id: Date.now(),
-          title: this.state.title,
-          description: this.state.description
-          }
-        ],
-        errors: {}
+  // saveNote = (e) => {
+  //   if(this.state.title.trim() && this.state.description.trim()){
+  //     this.setState({
+  //       title:'',
+  //       description: '',
+  //       notes: [
+  //         ...this.state.notes,
+  //         {
+  //         id: Date.now(),
+  //         title: this.state.title,
+  //         description: this.state.description
+  //         }
+  //       ],
+  //       errors: {}
+  //     });
+  //   }
+  // }
+  saveNote = id => {
+    if (this.state.title !== '' && this.state.description !== '') {
+      this.setState(state => {
+        return {
+          notes: [...state.notes, {
+            id: Date.now(),
+            title: state.title,
+            description: state.description
+          }],
+          title: '',
+          description: '',
+        };
       });
     }
+  };
+  deleteNote = id => {
+    this.setState({
+      notes: this.state.notes.filter(note => note.id !== id)
+    })
   }
   render(){
     console.log(this.state)
@@ -65,11 +85,11 @@ class App extends Component {
     return (
       <Fragment>
         <Typography align='center' variant='h2' gutterBottom>
-          Hello World
+          React Notes
         </Typography>
         <Grid container justify='center' spacing={2}>
           <Grid item xs={4}>
-            <NotesList notes={this.state.notes}/>
+            <NotesList deleteNote={this.deleteNote} notes={this.state.notes}/>
           </Grid>
           <Grid item xs={8}>
             <Route exact path='/' component={Home}/>
@@ -77,7 +97,15 @@ class App extends Component {
               path="/add"
               render={NotesForm2}
             />
-            <Route path='/view/:id' render={props => <Note {...props} notes={this.state.notes}/> } />
+            <Route
+              path='/view/:id'
+              render={props => {
+                const note = this.state.notes.filter(
+                  note => note.id ===parseInt(props.match.params.id)
+                )[0];
+                return note ? <Note note={note} /> : <Redirect to='/' />;
+              }}
+            />
 
           </Grid>
         </Grid>
